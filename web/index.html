@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sondeo previsto · La Línea</title>
+<style>
+[hidden]{display:none!important}body{margin:0;background:#fff8df;color:#473b2a;font:16px/1.6 system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:16px}h1{font-size:1.45rem;line-height:1.3;margin:0 0 8px}h2{font-size:1.1rem;margin-bottom:4px}p{margin:6px 0 12px}#fechas{font-weight:600}#estado{padding:8px 12px;background:#f1e8c9;border-radius:6px}#estado[data-warning="true"]{background:#ffe1bb}#diagrama{display:block;width:100%;height:auto;margin:14px 0}button,a{color:#604d22}button{font:inherit;padding:6px 12px;border:1px solid #bba771;border-radius:5px;background:#fffdf6;cursor:pointer}details{margin:14px 0}.fuente{font-size:.85rem}a{display:inline-block;margin-right:14px}#error{color:#8a3e1b}noscript{display:block;padding:12px}
+</style></head><body><main>
+<h1>Sondeo previsto · La Línea de la Concepción</h1>
+<p id="fechas">Cargando el perfil correspondiente a este momento…</p>
+<p id="estado" role="status" aria-live="polite"></p><p id="error" role="status"></p>
+<button id="actualizar" type="button">Actualizar</button>
+<img id="diagrama" hidden alt="Diagrama del sondeo previsto, índices de estabilidad e interpretación">
+<details id="detalle" hidden><summary>Leer interpretación</summary><div id="interpretacion"></div><p id="nota"></p></details>
+<p id="descargas" hidden><a id="png" download>Imagen</a><a id="csv" download>Datos CSV</a><a id="txt" download>Interpretación</a></p>
+<p class="fuente">ECMWF IFS · malla 0,1° · perfiles cada tres horas en UTC. Hora peninsular: UTC +1 en invierno y +2 en verano. Fuente: ECMWF Open Data · CC BY 4.0. Elaboración propia; interpretación mediante reglas, sin IA.</p>
+<noscript>Activa JavaScript para seleccionar el perfil correspondiente a la hora de acceso.</noscript>
+</main><script src="seleccion.js?v=2"></script><script src="visor.js?v=2"></script></body></html>
