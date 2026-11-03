@@ -1,0 +1,20 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {elegir,estado,pathSeguro}=require('./web/seleccion.js');
+const at=Date.parse;
+const make=(valid,run='2026-11-02T06:00:00Z')=>({valid_utc:valid,run_utc:run});
+const profiles=[make('2026-11-02T21:00:00Z'),make('2026-11-02T18:00:00Z'),make('2026-11-03T00:00:00Z')];
+assert.equal(elegir(profiles,at('2026-11-02T20:59:59.999Z')).valid_utc,'2026-11-02T18:00:00Z');
+assert.equal(elegir(profiles,at('2026-11-02T21:00:00Z')).valid_utc,'2026-11-02T21:00:00Z');
+assert.equal(elegir(profiles,at('2026-11-03T00:00:00Z')).valid_utc,'2026-11-03T00:00:00Z');
+assert.equal(elegir(profiles,at('2026-11-02T17:59:59Z')),null);
+assert.equal(estado(profiles[1],at('2026-11-02T20:59:59Z')).outdated,false);
+assert.equal(estado(profiles[1],at('2026-11-02T21:00:00Z')).outdated,true);
+const both=[make('2026-11-02T18:00:00Z'),make('2026-11-02T18:00:00Z','2026-11-02T12:00:00Z')];
+assert.equal(elegir(both,at('2026-11-02T19:00:00Z')).run_utc,'2026-11-02T12:00:00Z');
+assert.equal(elegir([make('2026-11-02T18:00:00Z','2026-11-03T00:00:00Z')],at('2026-11-02T19:00:00Z')),null);
+// La selección UTC se conserva al cambiar la hora peninsular.
+assert.equal(elegir([make('2026-10-25T00:00:00Z','2026-10-24T18:00:00Z'),make('2026-10-25T03:00:00Z','2026-10-24T18:00:00Z')],at('2026-10-25T02:30:00Z')).valid_utc,'2026-10-25T00:00:00Z');
+assert(pathSeguro('perfiles/20261102T06Z_012h'));
+for(const p of ['https://example.com','perfiles/../a','//example.com','perfiles/20261102T06Z_012h/extra'])assert(!pathSeguro(p));
+console.log('Selección horaria: cambio de franja, medianoche, cambio de hora, pasada reciente, ausencia y caducidad comprobados.');
