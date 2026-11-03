@@ -1,0 +1,48 @@
+name: Sondeo previsto ECMWF cada 3 horas
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 */3 * * *'
+concurrency:
+  group: sondeo-pages
+  cancel-in-progress: false
+jobs:
+  generar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: actions/cache@v4
+        with:
+          path: .cache-puntos
+          key: sondeo-0p1-v2-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            sondeo-0p1-v2-
+      - run: pip install -r requirements.txt
+      - run: node comprobar_seleccion.js
+      - run: python generar.py --salida _site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+  publicar:
+    needs: generar
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4
